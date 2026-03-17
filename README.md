@@ -21,6 +21,45 @@ Laravel is a web application framework with expressive, elegant syntax. We belie
 
 Laravel is accessible, powerful, and provides tools required for large, robust applications.
 
+## Deploy on Railway
+
+This project is configured for Railway using a Docker build.
+
+### Files added for Railway
+
+- `Dockerfile`
+- `.dockerignore`
+- `railway.json`
+
+### Required Railway environment variables
+
+Set these in your Railway service variables:
+
+- `APP_ENV=production`
+- `APP_DEBUG=false`
+- `APP_KEY=base64:...` (generate locally with `php artisan key:generate --show`)
+- `APP_URL=https://<your-railway-domain>`
+- `LOG_CHANNEL=stderr`
+
+If you attach a Railway MySQL database, also set:
+
+- `DB_CONNECTION=mysql`
+- `DB_HOST=<railway-mysql-host>`
+- `DB_PORT=<railway-mysql-port>`
+- `DB_DATABASE=<railway-mysql-database>`
+- `DB_USERNAME=<railway-mysql-user>`
+- `DB_PASSWORD=<railway-mysql-password>`
+
+### After first successful deploy
+
+Run migrations in Railway shell:
+
+`php artisan migrate --force`
+
+Optional optimization commands:
+
+`php artisan config:cache && php artisan route:cache && php artisan view:cache`
+
 ## Learning Laravel
 
 Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
