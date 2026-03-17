@@ -1,6 +1,9 @@
 FROM composer:2 AS composer_deps
 
 WORKDIR /app
+# composer:2 is Alpine-based — use apk, not apt-get
+RUN apk add --no-cache git unzip
+
 COPY composer.json composer.lock ./
 RUN composer install --no-dev --prefer-dist --no-interaction --optimize-autoloader
 
@@ -43,4 +46,10 @@ COPY --from=frontend_build /app/public/build ./public/build
 RUN chown -R www-data:www-data storage bootstrap/cache \
     && chmod -R ug+rwx storage bootstrap/cache
 
+COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
+RUN chmod +x /usr/local/bin/docker-entrypoint.sh
+
 EXPOSE 80
+
+ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]
+CMD ["apache2-foreground"]
