@@ -28,6 +28,7 @@ RUN apt-get update \
         libjpeg62-turbo-dev \
         libfreetype6-dev \
         libonig-dev \
+        libsqlite3-dev \
         unzip \
         git \
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
