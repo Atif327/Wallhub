@@ -5,7 +5,8 @@ WORKDIR /app
 RUN apk add --no-cache git unzip
 
 COPY composer.json composer.lock ./
-RUN composer install --no-dev --prefer-dist --no-interaction --optimize-autoloader
+# --no-scripts skips post-autoload-dump (artisan is not present in this stage)
+RUN composer install --no-dev --prefer-dist --no-interaction --optimize-autoloader --no-scripts
 
 FROM node:20-alpine AS frontend_build
 

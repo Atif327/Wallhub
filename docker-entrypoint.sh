@@ -6,6 +6,9 @@ if [ -z "$APP_KEY" ]; then
     php artisan key:generate --force
 fi
 
+# Discover and register service providers (skipped during docker build)
+php artisan package:discover --ansi
+
 # Run migrations
 php artisan migrate --force
 
