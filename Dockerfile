@@ -33,8 +33,10 @@ RUN apt-get update \
         git \
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
     && docker-php-ext-install pdo pdo_mysql pdo_sqlite mbstring zip gd bcmath \
-    && a2dismod mpm_event mpm_worker \
-    && a2enmod mpm_prefork rewrite \
+    && a2dismod mpm_event || true \
+    && a2dismod mpm_worker || true \
+    && a2enmod mpm_prefork \
+    && a2enmod rewrite \
     && rm -rf /var/lib/apt/lists/*
 
 ENV APACHE_DOCUMENT_ROOT=/var/www/html/public
@@ -46,7 +48,15 @@ COPY . .
 COPY --from=composer_deps /app/vendor ./vendor
 COPY --from=frontend_build /app/public/build ./public/build
 
-RUN chown -R www-data:www-data storage bootstrap/cache \
+# Create .env from example so artisan commands (key:generate, config:cache) work at boot
+RUN cp .env.example .env
+
+# Recreate storage dirs excluded by .dockerignore
+RUN mkdir -p storage/framework/views \
+        storage/framework/sessions \
+        storage/framework/cache \
+        storage/logs \
+    && chown -R www-data:www-data storage bootstrap/cache \
     && chmod -R ug+rwx storage bootstrap/cache
 
 COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh

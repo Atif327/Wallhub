@@ -11,7 +11,10 @@ storage/framework/views
 tests
 tools
 .env
-.env.*
+.env.local
+.env.staging
+.env.production
+.env.testing
 README.md
 SETUP_INSTRUCTIONS.md
 IMPLEMENTATION_STATUS.md

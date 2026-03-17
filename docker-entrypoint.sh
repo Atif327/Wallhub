@@ -7,10 +7,15 @@ cd /var/www/html
 chown -R www-data:www-data storage bootstrap/cache
 chmod -R ug+rwx storage bootstrap/cache
 
+# --- .env: ensure it exists (Railway injects real vars via environment, not .env) ---
+if [ ! -f ".env" ]; then
+    cp .env.example .env 2>/dev/null || touch .env
+fi
+
 # --- App key ---
 if [ -z "$APP_KEY" ]; then
     echo "[entrypoint] Generating APP_KEY..."
-    php artisan key:generate --force
+    php artisan key:generate --force || echo "[entrypoint] key:generate warning (non-fatal)"
 fi
 
 # --- SQLite: create the database file if using sqlite ---
