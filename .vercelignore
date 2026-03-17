@@ -1,0 +1,17 @@
+.vercelignore
+# Files and folders to ignore when deploying to Vercel
+vendor/
+node_modules/
+storage/
+.env
+.env.*
+tests/
+phpunit.xml
+.idea/
+.vscode/
+tools/
+resources/js/node_modules/
+resources/js/dist/
+build/
+.cache/
+.DS_Store
